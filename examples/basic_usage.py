@@ -1,34 +1,34 @@
 #!/usr/bin/env python3
 """
-基本使用示例
-演示如何使用GeminiModelsFetcher获取模型信息
+Basic Usage Examples
+Demonstrates how to use GeminiModelsFetcher to get model information
 """
 
 import os
 import sys
 
-# 添加父目录到路径，以便导入主模块
+# Add parent directory to path to import main module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from gemini_models_fetcher import GeminiModelsFetcher
 
 def example_basic_usage():
-    """基本使用示例"""
-    print("=== 基本使用示例 ===")
+    """Basic usage example"""
+    print("=== Basic Usage Example ===")
     
-    # 从环境变量获取API密钥
+    # Get API key from environment variable
     api_key = os.getenv('GOOGLE_AI_API_KEY')
     
     if not api_key:
-        print("请设置GOOGLE_AI_API_KEY环境变量")
-        print("获取API密钥: https://makersuite.google.com/app/apikey")
+        print("Please set GOOGLE_AI_API_KEY environment variable")
+        print("Get API key: https://makersuite.google.com/app/apikey")
         return
     
-    # 创建获取器实例
+    # Create fetcher instance
     fetcher = GeminiModelsFetcher(api_key)
     
-    # 获取所有模型
-    print("\n1. 获取所有模型...")
+    # Get all models
+    print("\n1. Getting all models...")
     models = fetcher.get_models_via_new_sdk()
     
     if not models:
@@ -38,23 +38,23 @@ def example_basic_usage():
         models = fetcher.get_models_via_rest_api()
     
     if models:
-        print(f"找到 {len(models)} 个模型")
+        print(f"Found {len(models)} models")
         
-        # 过滤最新模型
-        print("\n2. 过滤最新模型...")
+        # Filter latest models
+        print("\n2. Filtering latest models...")
         latest_models = fetcher.filter_latest_models(models)
-        print(f"其中 {len(latest_models)} 个是最新的Gemini模型")
+        print(f"{len(latest_models)} are latest Gemini models")
         
-        # 显示模型信息
-        print("\n3. 显示模型详细信息:")
-        fetcher.print_models_info(latest_models[:3])  # 只显示前3个
+        # Show model details
+        print("\n3. Showing model details:")
+        fetcher.print_models_info(latest_models[:3])  # Only show first 3
         
     else:
-        print("获取模型失败")
+        print("Failed to get models")
 
 def example_filter_specific_models():
-    """过滤特定模型的示例"""
-    print("\n\n=== 过滤特定模型示例 ===")
+    """Example of filtering specific models"""
+    print("\n\n=== Specific Model Filtering Example ===")
     
     api_key = os.getenv('GOOGLE_AI_API_KEY')
     if not api_key:
@@ -64,29 +64,29 @@ def example_filter_specific_models():
     models = fetcher.get_models_via_new_sdk()
     
     if models:
-        # 过滤出Gemini 2.5模型
+        # Filter Gemini 2.5 models
         gemini_25_models = []
         for model in models:
             if 'gemini-2.5' in model.get('name', '').lower():
                 gemini_25_models.append(model)
         
-        print(f"找到 {len(gemini_25_models)} 个Gemini 2.5模型:")
+        print(f"Found {len(gemini_25_models)} Gemini 2.5 models:")
         for model in gemini_25_models:
             print(f"- {model.get('name')}")
         
-        # 过滤出Flash模型
+        # Filter Flash models
         flash_models = []
         for model in models:
             if 'flash' in model.get('name', '').lower():
                 flash_models.append(model)
         
-        print(f"\n找到 {len(flash_models)} 个Flash模型:")
+        print(f"\nFound {len(flash_models)} Flash models:")
         for model in flash_models:
             print(f"- {model.get('name')}")
 
 def example_model_comparison():
-    """模型比较示例"""
-    print("\n\n=== 模型比较示例 ===")
+    """Model comparison example"""
+    print("\n\n=== Model Comparison Example ===")
     
     api_key = os.getenv('GOOGLE_AI_API_KEY')
     if not api_key:
@@ -96,20 +96,20 @@ def example_model_comparison():
     models = fetcher.get_models_via_new_sdk()
     
     if models:
-        # 比较不同模型的token限制
-        print("模型token限制比较:")
-        print(f"{'模型名称':<30} {'输入限制':<15} {'输出限制':<15}")
+        # Compare token limits of different models
+        print("Model token limits comparison:")
+        print(f"{'Model Name':<30} {'Input Limit':<15} {'Output Limit':<15}")
         print("-" * 60)
         
-        for model in models[:10]:  # 只显示前10个
-            name = model.get('name', 'N/A')[-30:]  # 截取后30个字符
+        for model in models[:10]:  # Only show first 10
+            name = model.get('name', 'N/A')[-30:]  # Get last 30 characters
             input_limit = model.get('input_token_limit', 'N/A')
             output_limit = model.get('output_token_limit', 'N/A')
             
             print(f"{name:<30} {str(input_limit):<15} {str(output_limit):<15}")
 
 if __name__ == "__main__":
-    # 运行所有示例
+    # Run all examples
     example_basic_usage()
     example_filter_specific_models()
     example_model_comparison()
